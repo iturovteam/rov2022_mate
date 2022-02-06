@@ -1,2 +1,2 @@
-# rov2022_mate
-ITUROV Team 2022 MATE Repository
+# ITUROV MATE 2022
+ITUROV Team MATE 2022 Repository
