@@ -1,0 +1,155 @@
+<?xml version="1.0"?>
+
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <xacro:property name="prop_mesh_file" value="file://$(find iturov_description)/meshes/propeller.dae"/>
+  <xacro:property name="sonar_mesh_file" value="file://$(find iturov_description)/meshes/sensors/ping_sonar.dae"/>
+
+  <xacro:macro name="thruster_t200" params="robot_namespace thruster_id *origin">
+
+    <link name="${robot_namespace}/thruster_${thruster_id}">
+      <visual>
+        <geometry>
+          <mesh filename="${prop_mesh_file}" scale="1 1 1" />
+        </geometry>
+      </visual>
+      <inertial>
+        <mass value="0.12" />
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <inertia ixx="0.000000017" ixy="0.0" ixz="0.0"
+                 iyy="0.000000017" iyz="0.0"
+                 izz="0.000000017" />
+      </inertial>
+    </link>
+
+    <joint name="${robot_namespace}/thruster_${thruster_id}_joint" type="continuous">
+      <xacro:insert_block name="origin" />
+      <axis xyz="1 0 0" />
+      <parent link="${robot_namespace}/base_link" />
+      <child link="${robot_namespace}/thruster_${thruster_id}" />
+    </joint>
+
+    <gazebo>
+      <plugin name="${robot_namespace}_${thruster_id}_thruster_model" filename="libuuv_thruster_ros_plugin.so">
+        <linkName>${robot_namespace}/thruster_${thruster_id}</linkName>
+        <jointName>${robot_namespace}/thruster_${thruster_id}_joint</jointName>
+        <thrusterID>${thruster_id}</thrusterID>
+        <gain>1</gain>
+
+        <!--
+        <clampMax>1900</clampMax>
+        <clampMin>1100</clampMin>
+        <thrustMin>0</thrustMin>
+        <thrustMax>36.43</thrustMax>
+        <thrust_efficiency>1</thrust_efficiency>
+        <propeller_efficiency>1</propeller_efficiency>
+        
+        <dynamics>
+          <type>ZeroOrder</type>
+        </dynamics>
+        -->
+
+        <dynamics>
+          <type>
+            FirstOrder
+          </type>
+          <timeConstant>
+            0.04
+          </timeConstant>
+        </dynamics>
+
+        <conversion>
+          <type>
+            LinearInterp
+          </type>
+          <inputValues>
+            -100 -99 -98 -97 -96 -95 -94 -93 -92 -91 -90 -89 -88 -87 -86 -85 -84 -83 -82 -81 -80 -79 -78 -77 -76 -75 -74 -73 -72 -71 -70 -69 -68 -67 -66 -65 -64 -63 -62 -61 -60 -59 -58 -57 -56 -55 -54 -53 -52 -51 -50 -49 -48 -47 -46 -45 -44 -43 -42 -41 -40 -39 -38 -37 -36 -35 -34 -33 -32 -31 -30 -29 -28 -27 -26 -25 -24 -23 -22 -21 -20 -19 -18 -17 -16 -15 -14 -13 -12 -11 -10 -9 -8 -7 -6 -5 -4 -3 -2 -1 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69 70 71 72 73 74 75 76 77 78 79 80 81 82 83 84 85 86 87 88 89 90 91 92 93 94 95 96 97 98 99 100
+          </inputValues>
+          <outputValues>
+            -28.48 -28.61 -28.38 -27.76 -27.32 -27.09 -26.69 -26.21 -25.49 -25.45 -25.14 -24.47 -23.94 -23.85 -23.4 -22.96 -22.6 -22.11 -21.85 -21.4 -21 -20.56 -20.29 -19.71 -19.44 -19.09 -18.47 -18.11 -17.71 -17.44 -17 -16.33 -16.2 -15.8 -15.31 -15.04 -14.64 -14.42 -14.11 -13.71 -13.44 -13.08 -12.68 -12.55 -11.97 -11.7 -11.3 -10.95 -10.64 -10.24 -10.01 -9.75 -9.44 -9.12 -8.86 -8.55 -8.19 -7.79 -7.57 -7.26 -7.08 -6.81 -6.45 -6.28 -5.92 -5.61 -5.34 -5.08 -4.85 -4.63 -4.32 -4.1 -3.83 -3.61 -3.34 -3.12 -2.9 -2.63 -2.41 -2.23 -2.01 -1.74 -1.61 -1.43 -1.21 -1.07 -0.89 -0.72 -0.58 -0.45 -0.36 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.41 0.54 0.72 0.94 1.12 1.29 1.52 1.74 1.96 2.18 2.5 2.72 3.03 3.25 3.61 3.87 4.19 4.5 4.81 5.08 5.39 5.79 6.14 6.41 6.72 6.99 7.43 7.74 8.15 8.41 8.77 9.12 9.48 9.84 10.19 10.64 11.17 11.39 11.75 12.1 12.55 12.86 13.26 13.75 14.06 14.55 15 15.35 16.02 16.42 16.77 17.35 17.84 18.11 18.69 18.87 19.27 19.93 20.47 20.91 21.36 21.93 22.29 22.87 23.54 24.16 24.6 25.14 25.67 26.03 26.61 27.23 27.9 28.16 28.74 29.5 29.85 30.25 30.96 31.63 31.99 32.52 33.14 33.37 33.81 34.35 35.01 35.68 36.35 36.21 36.43
+          </outputValues>
+        </conversion>
+
+      </plugin>
+    </gazebo>
+
+    <gazebo reference="${robot_namespace}/thruster_${thruster_id}">
+      <selfCollide>false</selfCollide>
+    </gazebo>
+  </xacro:macro>
+
+  <xacro:macro name="ping_sonar" params="namespace parent_link suffix *origin">
+
+    <link name="${namespace}/sonar${suffix}_link">
+
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="${sonar_mesh_file}" scale="1 1 1" />
+        </geometry>
+        <material name="blue">
+          <color rgba="0 0 0.8 1"/>
+        </material>
+      </visual>
+
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <cylinder radius="0.024" length="0.035"/>
+        </geometry>
+      </collision>
+
+      <inertial>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <mass value="0.133" />
+        <inertia ixx="0.00000017" ixy="0" ixz="0" iyy="0.00000017" iyz="0" izz="0.00000017" />
+      </inertial>
+    </link>
+
+    <joint name="${namespace}/sonar${suffix}_joint" type="fixed">
+      <xacro:insert_block name="origin"/>
+      <parent link="${parent_link}" />
+      <child link="${namespace}/sonar${suffix}_link" />
+    </joint>
+
+    <gazebo reference="${namespace}/sonar${suffix}_link">
+      <sensor type="ray" name="sonar${suffix}">
+        <pose>0 0 0 0 0 0</pose>
+        <update_rate>25</update_rate>
+        <visualize>True</visualize>
+        <ray>
+          <scan>
+            <horizontal>
+              <samples>3</samples>
+              <resolution>0.25</resolution>
+              <min_angle>-0.261799</min_angle>
+              <max_angle>0.261799</max_angle>
+            </horizontal>
+            <vertical>
+              <samples>3</samples>
+              <resolution>0.25</resolution>
+              <min_angle>-0.261799</min_angle>
+              <max_angle>0.261799</max_angle>
+            </vertical>
+          </scan>
+          <range>
+            <min>0.5</min>
+            <max>50.0</max>
+            <resolution>0.25</resolution>
+          </range>
+        </ray>
+        <plugin filename="libgazebo_ros_range.so" name="sonar${suffix}">
+          <gaussianNoise>0.005</gaussianNoise>
+          <alwaysOn>true</alwaysOn>
+          <updateRate>25</updateRate>
+          <topicName>/sensors/sonar${suffix}</topicName>
+          <frameName>${namespace}/sonar${suffix}_link</frameName>
+          <fov>0.523599</fov>
+          <radiation>ultrasound</radiation>
+        </plugin>
+      </sensor>
+    </gazebo>
+
+  </xacro:macro>
+
+</robot>

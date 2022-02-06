@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <!-- Center of buoyancy -->
+    <xacro:property name="iturov_cob" value="0.003 0 0.166"/>
+
+    <!-- Vehicle's actual volume -->
+    <xacro:property name="iturov_volume" value="0.012"/>
+
+    <!-- Describing the dimensions of the vehicle's bounding box -->
+    <xacro:property name="iturov_length" value="0.520"/>
+    <xacro:property name="iturov_width"  value="0.439"/>
+    <xacro:property name="iturov_height" value="0.373"/>
+
+    <xacro:macro name="iturov_hydro_model" params="namespace">
+
+      <link name="${namespace}/base_link">
+
+        <neutrally_buoyant>0</neutrally_buoyant>
+
+        <!-- Link's volume -->
+        <volume>${iturov_volume}</volume>
+
+        <!-- Link's bounding box-->
+        <box>
+          <width>${iturov_width}</width>
+          <length>${iturov_length}</length>
+          <height>${iturov_height}</height>
+        </box>
+
+        <!-- Center of buoyancy -->
+        <center_of_buoyancy>${iturov_cob}</center_of_buoyancy>
+
+        <hydrodynamic_model>
+          <type>fossen</type>
+          <added_mass>
+            1.7182 0 0 0 0 0
+            0 0 0 0 0 0
+            0 0 5.468 0 0 0
+            0 0 0 0 0 0
+            0 0 0 0 1.2481 0
+            0 0 0 0 0 0.4006
+          </added_mass>
+          <linear_damping>
+            -11.7391 -20 -31.8678 -25 -44.9085 -5
+          </linear_damping>
+          <quadratic_damping>
+             0 0 0 0 0 0
+          </quadratic_damping>
+        </hydrodynamic_model>
+
+      </link>
+    </xacro:macro>
+
+</robot>

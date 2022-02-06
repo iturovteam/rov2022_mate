@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+
+<launch>
+  
+	<arg name="joy_config" default="$(find iturov_control)/config/ps4_controller.yaml"/>
+	<!-- joy node -->
+	<node pkg="iturov_control" type="joy_node" name="joy_node" output="screen"/>
+
+	<!-- teleop joy control -->
+	<node pkg="iturov_control" type="iturov_rov_control.py" name="teleop_joy" output="screen" args="$(arg joy_config)"/>
+
+</launch>

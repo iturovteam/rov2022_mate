@@ -1,0 +1,44 @@
+plugin_blacklist:
+# common
+- 3dr_radio
+- actuator_control
+- ftp
+- global_position
+- safety_area
+## - setpoint_attitude
+- sys_time
+# extras
+- image_pub
+- 'mocap_*'
+- px4flow
+- 'vision_*'
+- distance_sensor
+- vibration
+- altitude
+# unknown
+- cam_imu_sync
+- camera
+- fake_gps
+- geofence
+- 'gps_*'
+- hil
+- home_position
+- landing_target
+- local_position
+- mount_control
+- nav_controller_output
+- obstacle_distance
+- odom
+- play_tune
+- rallypoint
+- rangefinder
+- 'setpoint_*'
+- terrain
+- trajectory
+- tunnel
+- waypoint
+- wheel_odometry
+- wind_estimation
+
+plugin_whitelist: []
+#- 'sys_*'

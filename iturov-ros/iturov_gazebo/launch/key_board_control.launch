@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+
+<launch>
+  <arg name="uuv_name" default="iturov"/>
+  <arg name="model_name" default="$(arg uuv_name)"/>
+  <arg name="output_topic" default="cmd_vel"/>
+  <!-- The type of message can also be geometry_msgs/Accel -->
+  <arg name="message_type" default="twist"/>
+  
+
+  <include file="$(find uuv_thruster_manager)/launch/thruster_manager.launch">
+    <arg name="uuv_name" value="$(arg uuv_name)" />
+    <arg name="model_name" value="$(arg model_name)" />
+    <arg name="reset_tam" default="false"/>
+    <arg name="output_dir" default="$(find iturov_description)/config/$(arg model_name)"/>
+    <arg name="config_file" default="$(find iturov_description)/config/$(arg model_name)/thruster_manager.yaml"/>
+    <arg name="tam_file" default="$(find iturov_description)/config/$(arg model_name)/TAM.yaml"/>
+  </include>
+
+  <group ns="$(arg uuv_name)">
+    <rosparam file="$(find iturov_description)/config/$(arg model_name)/inertial.yaml" command="load"/>
+    <rosparam file="$(find iturov_description)/config/$(arg model_name)/vel_pid_control.yaml" command="load"/>
+
+    <node pkg="uuv_control_cascaded_pid" type="AccelerationControl.py" name="acceleration_control"
+          output="log">
+      <param name="tf_prefix" type="string" value="$(arg uuv_name)/" />
+    </node>
+
+    <node pkg="uuv_control_cascaded_pid" type="VelocityControl.py" name="velocity_control"
+        output="log">
+      <remap from="odom" to="/$(arg uuv_name)/pose_gt"/>
+      <remap from="cmd_accel" to="/$(arg uuv_name)/cmd_accel"/>
+    </node>
+
+    <node pkg="iturov_control" type="vehicle_keyboard_teleop.py" name="keyboard_uuv_velocity_teleop" 	output="screen">
+      <remap from="output" to="/$(arg uuv_name)/$(arg output_topic)"/>
+      <rosparam subst_value="true">
+        type: $(arg message_type)
+      </rosparam>
+    </node>
+
+  </group>
+</launch>

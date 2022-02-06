@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+
+<launch>
+	<!-- Kameralar -->
+	<include file="$(find iturov_camera)/launch/camera_stream.launch">
+		<arg name="camera_id" value="0"/>
+		<arg name="camera_name" value="front_camera"/>
+	</include>
+
+	<include file="$(find iturov_camera)/launch/camera_stream.launch">
+		<arg name="camera_id" value="1"/>
+		<arg name="camera_name" value="bottom_camera"/>
+	</include>
+
+	<!-- Mavros -->
+	<include file="$(find iturov_control)/launch/apm.launch"/>
+
+	<!-- Joystick -->
+	<include file="$(find iturov_control)/launch/teleop_joy.launch"/>
+
+	<!-- IMU Odometry -->
+	<include file="$(find iturov_localization)/launch/imu_odom.launch" />
+</launch>

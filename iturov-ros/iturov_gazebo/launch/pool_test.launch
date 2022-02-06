@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+
+<launch>
+	<include file="$(find iturov_worlds)/launch/gazebo_pool.launch"/>
+	<include file="$(find iturov_description)/launch/upload.launch"/>
+</launch>

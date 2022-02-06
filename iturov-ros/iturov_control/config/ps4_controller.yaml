@@ -1,0 +1,17 @@
+#    -- PS4 CONTROLLER --
+
+#        - Axes -
+# Output             Input
+forward            : 4
+lateral            : 0
+throttle           : 1
+yaw                : 3
+pitch              : 6
+roll               : 7
+
+#      - Buttons -
+# Output             Input
+arm                : 5
+disarm             : 4
+
+

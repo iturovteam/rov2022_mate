@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <xacro:thruster_t200 robot_namespace="${namespace}" thruster_id="0">
+    <origin xyz="0.211143 0.159086 -0.001556" rpy="0 0 ${-0.25*pi}"/>
+  </xacro:thruster_t200>
+
+  <xacro:thruster_t200 robot_namespace="${namespace}" thruster_id="1">
+    <origin xyz="0.091836 0.171911 -0.039232" rpy="0 ${-0.5*pi} 0"/>
+  </xacro:thruster_t200>
+  
+  <xacro:thruster_t200 robot_namespace="${namespace}" thruster_id="2">
+    <origin xyz="-0.070614 0.171911 -0.039232" rpy="0 ${-0.5*pi} 0"/>
+  </xacro:thruster_t200>
+
+  <xacro:thruster_t200 robot_namespace="${namespace}" thruster_id="3">
+    <origin xyz="-0.203231 0.145779 -0.001556" rpy="0 0 ${-0.75*pi}"/>
+  </xacro:thruster_t200>
+
+  <xacro:thruster_t200 robot_namespace="${namespace}" thruster_id="4">
+    <origin xyz="0.211142 -0.156145 -0.00155" rpy="0 0 ${0.25*pi}"/>
+  </xacro:thruster_t200>
+
+  <xacro:thruster_t200 robot_namespace="${namespace}" thruster_id="5">
+    <origin xyz="0.091835 -0.16897 -0.039232" rpy="0 ${-0.5*pi} 0"/>
+  </xacro:thruster_t200>
+
+  <xacro:thruster_t200 robot_namespace="${namespace}" thruster_id="6">
+    <origin xyz="-0.070615 -0.16897 -0.039232" rpy="0 ${-0.5*pi} 0"/>
+  </xacro:thruster_t200>
+
+  <xacro:thruster_t200 robot_namespace="${namespace}" thruster_id="7">
+    <origin xyz="-0.20323 -0.142837 -0.001556" rpy="0 0 ${0.75*pi}"/>
+  </xacro:thruster_t200>
+
+</robot>
